@@ -2,3 +2,4 @@
 yarn-error.log
 npm-debug.log
 /logs/
+data/top-secret.json
