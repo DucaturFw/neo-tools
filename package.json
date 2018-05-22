@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "node js/app.js"
+  },
+  "dependencies": {
+    "@cityofzion/neon-js": "^3.8.0",
+    "@types/node": "^10.1.2"
+  }
+}
