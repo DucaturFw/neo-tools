@@ -27,7 +27,7 @@ export function accFromEncrypted(key: string, pass: string): Account
 {
 	return Neon.create.account(key).decrypt(pass)
 }
-export function constructMoneyTx(from: string | Account, to: string, params: {gas: number, neo: number, remark: string}): Promise<Transaction>
+export function constructMoneyTx(from: string | Account, to: string, params: {gas?: number, neo?: number, remark?: string}): Promise<Transaction>
 {
 	// let acc2addr = "AKQ8cCUoE99ncnRRbaYPit3pV3g58A6FJk"
 	// console.log(api.makeIntent({ NEO: 1, GAS: 1 }, acc2addr))

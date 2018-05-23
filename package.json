@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "node js/app.js"
+    "start": "node js/app.js",
+    "send-money": "node js/cli-send.js"
   },
   "dependencies": {
     "@cityofzion/neon-js": "^3.8.0",
