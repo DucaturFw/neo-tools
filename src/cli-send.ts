@@ -1,23 +1,22 @@
 import * as tools from "./tools"
+import { parseArgv, loadConfig } from "./cli-utils";
 
-console.log(process.argv)
-// argv[0] = '/usr/bin/node'
-// argv[1] = '/mnt/c/dev/neo/zl-neo-tools/js/cli-send.js'
-let args = process.argv.slice(2)
-type Params = {[key: string]: string}
-let params = args.filter(x => x.startsWith('--')).map(x => x.substr(2).split('=')).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1]}), <Params>{ })
-console.log(params)
+// console.log(process.argv)
+let params = parseArgv(process.argv) as { from: string, to: string, gas?: string, neo: string }
+// as { from: string, to: string } & ({ gas: string } | { neo: string })
 
 _send()
 
 function _send()
 {
-	if (!params.from || !params.to || (!params.gas && !params.neo) || (!parseFloat(params.gas) && !parseFloat(params.neo)))
+	if (!params.from || !params.to || (!params.gas && !params.neo) || (!parseFloat(params.gas || "") && !parseFloat(params.neo || "")))
 		return console.error("incomplete params!"), console.error(params)
 
-	tools.initTestnet({ neoscan: "http://54.159.181.181:4000/api/main_net" })
-	let client = tools.connect("http://54.159.181.181:30333")
-	tools.constructMoneyTx(params.from, params.to, { ...params, gas: parseFloat(params.gas), neo: parseFloat(params.neo) })
+	let cfg = loadConfig()
+	tools.initTestnet({ neoscan: cfg.neoscan })
+	let client = tools.connect(cfg.rpc)
+	
+	tools.constructMoneyTx(params.from, params.to, { ...params as any, gas: parseFloat(params.gas || "0"), neo: parseFloat(params.neo || "0") })
 		.then(tx => client.sendRawTransaction(tx)
 			.then(x => console.log(`money sent! (${x})`)))
 		.catch(err => console.error(err))

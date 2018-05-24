@@ -42,8 +42,7 @@ sendContract()
 
 function sendContract()
 {
-	let txn = new tx.Transaction(tx.deserializeTransaction(RAW_TX_WITH_EMPTY_CONTRACT))
-	txn.sign(acc2)
+	let txn = tools.signRawTx(acc2, RAW_TX_WITH_EMPTY_CONTRACT)
 	console.log(txn.hash)
 
 	// client.sendRawTransaction(txn).then(x => console.log(x)).catch(err => console.error(err))

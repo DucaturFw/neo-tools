@@ -54,3 +54,23 @@ export function constructMoneyTx(from: string | Account, to: string, params: {ga
 		return txn
 	})
 }
+export function signRawTx(acc: string | Account, contractTxHex: string): tx.Transaction
+{
+	let txn = new tx.Transaction(tx.deserializeTransaction(contractTxHex))
+	let acc2 = (typeof acc === "string") ? Neon.create.account(acc) : acc
+	txn.sign(acc2)
+	// console.log(txn.hash)
+	return txn
+
+	// client.sendRawTransaction(txn).then(x => console.log(x)).catch(err => console.error(err))
+}
+export function txDeployContract(author: string | Account, contractHex: string)
+{
+	let acc = (typeof author === "string") ? Neon.create.account(author) : author
+	return api.neoscan.getBalance(NET_NAME, acc.address).then(balance =>
+	{
+		throw "not implemented yet:\n1. wtf should go to outputs?\n2.wtf is override?"
+		let txn = tx.Transaction.createInvocationTx(balance, [], contractHex, 500, {})
+		return txn
+	})
+}

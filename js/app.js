@@ -38,8 +38,7 @@ var RAW_TX_WITH_EMPTY_CONTRACT = 'd1018723646f6573206e6f7468696e672c206a75737420
 parseTransaction();
 sendContract();
 function sendContract() {
-    var txn = new neon_js_1.tx.Transaction(neon_js_1.tx.deserializeTransaction(RAW_TX_WITH_EMPTY_CONTRACT));
-    txn.sign(acc2);
+    var txn = tools.signRawTx(acc2, RAW_TX_WITH_EMPTY_CONTRACT);
     console.log(txn.hash);
     // client.sendRawTransaction(txn).then(x => console.log(x)).catch(err => console.error(err))
 }

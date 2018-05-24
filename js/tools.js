@@ -50,3 +50,21 @@ function constructMoneyTx(from, to, params) {
     });
 }
 exports.constructMoneyTx = constructMoneyTx;
+function signRawTx(acc, contractTxHex) {
+    var txn = new neon_js_1.tx.Transaction(neon_js_1.tx.deserializeTransaction(contractTxHex));
+    var acc2 = (typeof acc === "string") ? neon_js_1.default.create.account(acc) : acc;
+    txn.sign(acc2);
+    // console.log(txn.hash)
+    return txn;
+    // client.sendRawTransaction(txn).then(x => console.log(x)).catch(err => console.error(err))
+}
+exports.signRawTx = signRawTx;
+function txDeployContract(author, contractHex) {
+    var acc = (typeof author === "string") ? neon_js_1.default.create.account(author) : author;
+    return neon_js_1.api.neoscan.getBalance(NET_NAME, acc.address).then(function (balance) {
+        throw "not implemented yet:\n1. wtf should go to outputs?\n2.wtf is override?";
+        var txn = neon_js_1.tx.Transaction.createInvocationTx(balance, [], contractHex, 500, {});
+        return txn;
+    });
+}
+exports.txDeployContract = txDeployContract;
