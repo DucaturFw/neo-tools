@@ -15,8 +15,14 @@ function _send()
 	let cfg = loadConfig()
 	tools.initTestnet({ neoscan: cfg.neoscan })
 	let client = tools.connect(cfg.rpc)
+
+	let data = { ...params as any } as { gas?: number, neo?: number}
+	if (params.gas)
+		data.gas = parseFloat(params.gas)
+	if (params.neo)
+		data.neo = parseFloat(params.neo)
 	
-	tools.constructMoneyTx(params.from, params.to, { ...params as any, gas: parseFloat(params.gas || "0"), neo: parseFloat(params.neo || "0") })
+	tools.constructMoneyTx(params.from, params.to, data)
 		.then(tx => client.sendRawTransaction(tx)
 			.then(x => console.log(`money sent! (${x})`)))
 		.catch(err => console.error(err))

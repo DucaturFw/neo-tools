@@ -27,7 +27,12 @@ function _send() {
     var cfg = cli_utils_1.loadConfig();
     tools.initTestnet({ neoscan: cfg.neoscan });
     var client = tools.connect(cfg.rpc);
-    tools.constructMoneyTx(params.from, params.to, __assign({}, params, { gas: parseFloat(params.gas || "0"), neo: parseFloat(params.neo || "0") }))
+    var data = __assign({}, params);
+    if (params.gas)
+        data.gas = parseFloat(params.gas);
+    if (params.neo)
+        data.neo = parseFloat(params.neo);
+    tools.constructMoneyTx(params.from, params.to, data)
         .then(function (tx) { return client.sendRawTransaction(tx)
         .then(function (x) { return console.log("money sent! (" + x + ")"); }); })
         .catch(function (err) { return console.error(err); });
