@@ -39,7 +39,7 @@ function constructMoneyTx(from, to, params) {
     if (params.remark)
         txn.addRemark(params.remark);
     var acc = (typeof from === "string") ? neon_js_1.default.create.account(from) : from;
-    return neon_js_1.api.neoscan.getBalance(NET_NAME, acc.address).then(function (bal) {
+    return getBalance(acc.address).then(function (bal) {
         // console.log(JSON.stringify(bal))
         txn.calculate(bal);
         txn.sign(acc);
@@ -50,6 +50,10 @@ function constructMoneyTx(from, to, params) {
     });
 }
 exports.constructMoneyTx = constructMoneyTx;
+function getBalance(address) {
+    return neon_js_1.api.neoscan.getBalance(NET_NAME, address);
+}
+exports.getBalance = getBalance;
 function signRawTx(acc, contractTxHex) {
     var txn = new neon_js_1.tx.Transaction(neon_js_1.tx.deserializeTransaction(contractTxHex));
     var acc2 = (typeof acc === "string") ? neon_js_1.default.create.account(acc) : acc;

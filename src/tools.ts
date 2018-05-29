@@ -1,5 +1,5 @@
 import Neon, { rpc, api, tx } from "@cityofzion/neon-js"
-import { Account } from "@cityofzion/neon-js/src/wallet";
+import { Account, Balance } from "@cityofzion/neon-js/src/wallet";
 import { Transaction } from "@cityofzion/neon-js/src/transactions";
 
 const NET_NAME = 'PrivateNet'
@@ -42,7 +42,7 @@ export function constructMoneyTx(from: string | Account, to: string, params: {ga
 
 	let acc = (typeof from === "string") ? Neon.create.account(from) : from
 	
-	return api.neoscan.getBalance(NET_NAME, acc.address).then(bal =>
+	return getBalance(acc.address).then(bal =>
 	{
 		// console.log(JSON.stringify(bal))
 		txn.calculate(bal)
@@ -53,6 +53,10 @@ export function constructMoneyTx(from: string | Account, to: string, params: {ga
 
 		return txn
 	})
+}
+export function getBalance(address: string): Promise<Balance>
+{
+	return api.neoscan.getBalance(NET_NAME, address)
 }
 export function signRawTx(acc: string | Account, contractTxHex: string): tx.Transaction
 {
